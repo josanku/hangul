@@ -1,0 +1,19 @@
+# 대용량 원본 PDF (Google Drive에 별도 보관)
+HangulJeongeum-20260325plus.pdf
+Hangul-20260325plus-english.pdf
+
+# 분할된 챕터 PDF (1.4GB씩, GitHub 한도 초과)
+chapters/*.pdf
+chapters-en/*.pdf
+
+# 임시 파일
+.DS_Store
+*.log
+__pycache__/
+*.pyc
+.claude/
+node_modules/
+
+# 운영자 페이지의 임시 작업 파일
+*.tmp
+*.bak

@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한글정음 — HANGUL, The Cosmic Philosophy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&family=Noto+Sans+SC:wght@400;600;800&family=Noto+Sans+JP:wght@400;600;800&family=Noto+Sans+Arabic:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --heaven: #1e40d4;
+    --human: #2ea043;
+    --earth: #d12c2c;
+    --bg: #fafaf7;
+    --ink: #1a1a1a;
+    --muted: #666;
+    --line: #e5e5e0;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  body[lang="ko"] { font-family: 'Noto Sans KR', 'Inter', sans-serif; }
+  body[lang="zh"] { font-family: 'Noto Sans SC', 'Inter', sans-serif; }
+  body[lang="ja"] { font-family: 'Noto Sans JP', 'Inter', sans-serif; }
+  body[lang="ar"] { font-family: 'Noto Sans Arabic', sans-serif; direction: rtl; }
+  body[lang="ar"] .container { direction: rtl; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+
+  /* LANG SWITCHER */
+  .lang-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250, 250, 247, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+  }
+  .lang-bar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+  .lang-pick {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .lang-pick button {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .lang-pick button:hover { color: var(--ink); border-color: var(--line); }
+  .lang-pick button.active {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    background: linear-gradient(90deg, rgba(30,64,212,0.08), rgba(46,160,67,0.08), rgba(209,44,44,0.08));
+    text-decoration: none;
+    border: 1px solid var(--line);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .nav-link:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 72px 24px 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero .ko-title {
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .hero .en-title {
+    font-size: clamp(18px, 2.5vw, 24px);
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin-bottom: 32px;
+  }
+  .hero .tagline {
+    font-size: clamp(15px, 2vw, 18px);
+    max-width: 680px;
+    margin: 0 auto 32px;
+  }
+  .hero .author {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .cta {
+    display: inline-flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-outline { border: 1.5px solid var(--ink); color: var(--ink); }
+  .btn-kakao {
+    background: #FEE500;
+    color: #191919;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-kakao svg { width: 20px; height: 20px; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+
+  /* VIDEO INTRO */
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #0b0d12;
+    aspect-ratio: 16 / 9;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    margin-top: 24px;
+  }
+  .video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .video-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .video-link {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .video-link:hover { color: var(--ink); }
+
+  /* WORD OF THE HOUR */
+  #wordOfHour { display: none; }
+  body[lang="ko"] #wordOfHour { display: block; }
+  .word-hour {
+    background: linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: center;
+    margin: 32px auto;
+    max-width: 560px;
+  }
+  .word-hour .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--heaven);
+    background: rgba(30, 64, 212, 0.08);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .word-hour .word {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .word-hour .meaning {
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .word-hour .example {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .word-hour .hour-mark {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 16px;
+    letter-spacing: 0.04em;
+  }
+
+  /* NEWS FEED */
+  #newsFeed { display: none; }
+  body[lang="ko"] #newsFeed { display: block; }
+  .news-list { display: grid; gap: 12px; margin-top: 24px; }
+  .news-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 22px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 0.15s;
+    display: block;
+  }
+  .news-card:hover { border-color: var(--ink); }
+  .news-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .news-cat {
+    background: var(--ink);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 11px;
+  }
+  .news-cat.event { background: var(--human); }
+  .news-cat.exhibit { background: var(--heaven); }
+  .news-cat.policy { background: var(--earth); }
+  .news-cat.youtube { background: #ff0000; }
+  .news-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .news-summary { font-size: 13px; color: var(--muted); }
+  .news-empty { text-align: center; padding: 32px; color: var(--muted); font-size: 14px; }
+
+  .news-card.has-thumb { display: flex; gap: 14px; align-items: stretch; padding: 14px 16px; }
+  .news-thumb {
+    position: relative;
+    flex-shrink: 0;
+    width: 120px;
+    height: 68px;
+    background: #000 center/cover no-repeat;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .news-thumb::after {
+    content: '▶';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.9);
+    font-size: 22px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  }
+  .news-body { flex: 1; min-width: 0; }
+  @media (max-width: 540px) {
+    .news-thumb { width: 88px; height: 50px; }
+  }
+
+  /* COMMUNITY */
+  .community {
+    background: linear-gradient(180deg, #fffef0 0%, #fff 100%);
+    text-align: center;
+  }
+  .community .container { max-width: 720px; }
+  .community-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+  @media (max-width: 720px) {
+    .community-cards { grid-template-columns: 1fr; }
+  }
+  .community-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: left;
+  }
+  body[lang="ar"] .community-card { text-align: right; }
+  .community-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .community-card p {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .community-card .btn { font-size: 14px; padding: 12px 22px; }
+
+  /* SECTION */
+  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+  section h2 {
+    font-size: clamp(24px, 3.5vw, 32px);
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+  section p { margin-bottom: 16px; }
+  section p.lead { font-size: 17px; color: var(--muted); margin-bottom: 32px; max-width: 680px; }
+
+  /* TRIAD */
+  .triad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 40px 0;
+  }
+  .triad-card {
+    text-align: center;
+    padding: 32px 16px;
+    border-radius: 16px;
+    background: white;
+    border: 1px solid var(--line);
+  }
+  .triad-shape {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+  }
+  .triad-shape svg { width: 100%; height: 100%; }
+  .triad-card.heaven .triad-shape circle { fill: var(--heaven); }
+  .triad-card.human .triad-shape polygon { fill: var(--human); }
+  .triad-card.earth .triad-shape rect { fill: var(--earth); }
+
+  .triad-letter {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 12px 0 4px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .heaven .triad-letter { color: var(--heaven); }
+  .human .triad-letter { color: var(--human); }
+  .earth .triad-letter { color: var(--earth); }
+
+  .triad-label { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .triad-en {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+  .triad-detail { font-size: 13px; color: var(--muted); text-align: left; line-height: 1.7; }
+  .triad-detail strong { color: var(--ink); font-weight: 600; }
+  body[lang="ar"] .triad-detail { text-align: right; }
+
+  /* DERIVATION */
+  .derivation {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    font-family: "SF Mono", "Noto Sans Mono CJK KR", monospace;
+    font-size: 15px;
+    line-height: 2;
+    margin: 24px 0;
+  }
+  .derivation .ko-line { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .derivation .key { font-weight: 700; font-size: 18px; min-width: 24px; font-family: 'Noto Sans KR', sans-serif; }
+  .derivation .arrow { color: var(--muted); }
+  .derivation .heaven .key { color: var(--heaven); }
+  .derivation .human .key { color: var(--human); }
+  .derivation .earth .key { color: var(--earth); }
+
+  /* CHAPTERS */
+  .chapter-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .chapter {
+    padding: 16px 20px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    transition: border-color 0.15s, transform 0.15s;
+    text-decoration: none;
+    color: var(--ink);
+    display: block;
+  }
+  .chapter:hover { border-color: var(--ink); transform: translateY(-1px); }
+  .chapter.star { border-color: var(--heaven); }
+  .chapter-num { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .chapter-title { font-size: 15px; font-weight: 600; margin-top: 2px; }
+  .chapter-pages { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* SYSTEM TABLE */
+  .system-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .system-table th, .system-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  body[lang="ar"] .system-table th, body[lang="ar"] .system-table td { text-align: right; }
+  .system-table th {
+    background: #f5f5f0;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .system-table tr:last-child td { border-bottom: none; }
+  .system-table .heaven { color: var(--heaven); font-weight: 700; }
+  .system-table .human { color: var(--human); font-weight: 700; }
+  .system-table .earth { color: var(--earth); font-weight: 700; }
+  .glyph-cell { font-family: 'Noto Sans KR', sans-serif; }
+
+  /* QUOTE */
+  blockquote {
+    border-left: 3px solid var(--ink);
+    padding-left: 20px;
+    font-style: italic;
+    color: var(--muted);
+    margin: 24px 0;
+  }
+  body[lang="ar"] blockquote {
+    border-left: none;
+    border-right: 3px solid var(--ink);
+    padding-left: 0;
+    padding-right: 20px;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  footer p { margin-bottom: 8px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .triad { grid-template-columns: 1fr; }
+    section { padding: 48px 0; }
+    .hero { padding: 48px 24px 32px; }
+    .lang-bar .container { justify-content: center; }
+  }
+</style>
+</head>
+<body lang="ko">
+
+<div class="lang-bar">
+  <div class="container">
+    <div class="brand">○△□ <span data-i18n="brand">한글정음</span></div>
+    <a class="nav-link" href="hangulart.html" title="이름으로 만드는 한글아트">
+      🎨 <span data-i18n="nav.hangulart">한글아트</span>
+    </a>
+    <div class="lang-pick" id="langPick">
+      <button data-lang="ko" class="active">한국어</button>
+      <button data-lang="en">English</button>
+      <button data-lang="zh">中文</button>
+      <button data-lang="ja">日本語</button>
+      <button data-lang="es">Español</button>
+      <button data-lang="ar">العربية</button>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="container">
+    <h1 class="ko-title" data-i18n="hero.title">한글정음</h1>
+    <div class="en-title" data-i18n="hero.subtitle">HANGUL · The Cosmic Philosophy</div>
+    <p class="tagline" data-i18n="hero.tagline"></p>
+    <div class="author" data-i18n="hero.author"></div>
+    <div class="cta">
+      <a class="btn btn-primary" id="downloadPrimary" href="https://wehome.me/trust/hangul" data-i18n="hero.download_primary"></a>
+      <a class="btn btn-outline" id="downloadSecondary" href="https://wehome.me/trust/hangul-en" data-i18n="hero.download_secondary"></a>
+    </div>
+  </div>
+</div>
+
+<section id="video">
+  <div class="container">
+    <h2 data-i18n="video.heading"></h2>
+    <p class="lead" data-i18n="video.lead"></p>
+    <div class="video-wrap">
+      <iframe src="video.html" title="HANGUL Intro" loading="lazy" allow="autoplay"></iframe>
+    </div>
+    <div class="video-actions">
+      <a class="video-link" href="video.html" target="_blank" data-i18n="video.fullscreen"></a>
+    </div>
+  </div>
+</section>
+
+<section id="wordOfHour">
+  <div class="container">
+    <div class="word-hour">
+      <div class="tag">이 시간의 우리말</div>
+      <div class="word" id="wordValue">—</div>
+      <div class="meaning" id="wordMeaning">—</div>
+      <div class="example" id="wordExample">—</div>
+      <div class="hour-mark" id="wordHourMark">—</div>
+      <div style="margin-top:16px;">
+        <a href="words.html" style="font-size:13px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);">전체 우리말 보기 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="newsFeed">
+  <div class="container">
+    <h2>한글 소식 · 전시 · 이벤트 · 정책</h2>
+    <p class="lead">매일 모은 한글 관련 최신 소식. 운영자가 손수 큐레이션합니다.</p>
+    <div class="news-list" id="newsList"></div>
+    <p style="margin-top:24px;font-size:13px;color:var(--muted);">
+      매일 오전 9시 카카오톡 채널로 발송 · <a href="admin.html" style="color:var(--ink);">운영자 페이지</a>
+    </p>
+  </div>
+</section>
+
+<section id="triad">
+  <div class="container">
+    <h2 data-i18n="triad.heading"></h2>
+    <p class="lead" data-i18n="triad.lead"></p>
+
+    <div class="triad">
+      <div class="triad-card heaven">
+        <div class="triad-shape"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36"/></svg></div>
+        <div class="triad-letter">ㅇ</div>
+        <div class="triad-label" data-i18n="triad.heaven.label"></div>
+        <div class="triad-en" data-i18n="triad.heaven.en"></div>
+        <div class="triad-detail" data-i18n="triad.heaven.detail"></div>
+      </div>
+      <div class="triad-card human">
+        <div class="triad-shape"><svg viewBox="0 0 80 80"><polygon points="40,4 76,72 4,72"/></svg></div>
+        <div class="triad-letter">ㅅ</div>
+        <div class="triad-label" data-i18n="triad.human.label"></div>
+        <div class="triad-en" data-i18n="triad.human.en"></div>
+        <div class="triad-detail" data-i18n="triad.human.detail"></div>
+      </div>
+      <div class="triad-card earth">
+        <div class="triad-shape"><svg viewBox="0 0 80 80"><rect x="6" y="6" width="68" height="68"/></svg></div>
+        <div class="triad-letter">ㅁ</div>
+        <div class="triad-label" data-i18n="triad.earth.label"></div>
+        <div class="triad-en" data-i18n="triad.earth.en"></div>
+        <div class="triad-detail" data-i18n="triad.earth.detail"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="derivation">
+  <div class="container">
+    <h2 data-i18n="deriv.heading"></h2>
+    <p class="lead" data-i18n="deriv.lead"></p>
+
+    <div class="derivation">
+      <div class="ko-line heaven"><span class="key">ㅇ</span> <span class="arrow">→</span> ㆁ ㅎ ㆆ ㆅ</div>
+      <div class="ko-line human"><span class="key">ㅅ</span> <span class="arrow">→</span> ㅈ ㅊ ㅿ</div>
+      <div class="ko-line earth"><span class="key">ㅁ</span> <span class="arrow">→</span> ㅂ ㅍ ㄱ ㅋ ㄴ ㄷ ㅌ ㄹ</div>
+    </div>
+
+    <table class="system-table">
+      <thead>
+        <tr>
+          <th data-i18n="deriv.tbl.vowel"></th>
+          <th data-i18n="deriv.tbl.compose"></th>
+          <th data-i18n="deriv.tbl.sound"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="glyph-cell"><span class="heaven">ㆍ</span></td><td data-i18n="deriv.v1"></td><td>[ʌ]</td></tr>
+        <tr><td class="glyph-cell"><span class="human">ㅣ</span></td><td data-i18n="deriv.v2"></td><td>i</td></tr>
+        <tr><td class="glyph-cell"><span class="earth">ㅡ</span></td><td data-i18n="deriv.v3"></td><td>eu</td></tr>
+        <tr><td class="glyph-cell">ㅏ ㅓ ㅑ ㅕ</td><td data-i18n="deriv.v4"></td><td>a · eo · ya · yeo</td></tr>
+        <tr><td class="glyph-cell">ㅗ ㅜ ㅛ ㅠ</td><td data-i18n="deriv.v5"></td><td>o · u · yo · yu</td></tr>
+      </tbody>
+    </table>
+
+    <p data-i18n="deriv.foot"></p>
+  </div>
+</section>
+
+<section id="chapters">
+  <div class="container">
+    <h2 data-i18n="ch.heading"></h2>
+    <p class="lead" data-i18n="ch.lead"></p>
+    <div class="chapter-list" id="chapterList"></div>
+  </div>
+</section>
+
+<section id="system">
+  <div class="container">
+    <h2 data-i18n="sys.heading"></h2>
+    <p class="lead" data-i18n="sys.lead"></p>
+
+    <table class="system-table">
+      <thead>
+        <tr>
+          <th data-i18n="sys.tbl.category"></th>
+          <th data-i18n="sys.tbl.letters"></th>
+          <th data-i18n="sys.tbl.roman"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="heaven" data-i18n="sys.heaven"></span></td><td class="glyph-cell">ㅇ ㅎ</td><td>◌/ŋ · H</td></tr>
+        <tr><td><span class="human" data-i18n="sys.human"></span></td><td class="glyph-cell">ㅅ ㅈ ㅊ</td><td>S · J · Ch</td></tr>
+        <tr><td><span class="earth" data-i18n="sys.earth"></span></td><td class="glyph-cell">ㅁ ㅂ ㅍ ㄴ ㄷ ㅌ ㄹ ㄱ ㅋ</td><td>M B P · N D T R/L · G K</td></tr>
+        <tr><td data-i18n="sys.v_base"></td><td class="glyph-cell"><span class="heaven">ㆍ</span> <span class="human">ㅣ</span> <span class="earth">ㅡ</span></td><td>ʌ · i · eu</td></tr>
+        <tr><td data-i18n="sys.v_human"></td><td class="glyph-cell">ㅏ ㅓ ㅑ ㅕ</td><td>a · eo · ya · yeo</td></tr>
+        <tr><td data-i18n="sys.v_earth"></td><td class="glyph-cell">ㅗ ㅜ ㅛ ㅠ</td><td>o · u · yo · yu</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="community" class="community">
+  <div class="container">
+    <h2 data-i18n="community.heading"></h2>
+    <p class="lead" data-i18n="community.lead" style="margin-left:auto;margin-right:auto;"></p>
+
+    <div class="community-cards">
+      <div class="community-card">
+        <h3>
+          <svg viewBox="0 0 256 256" width="22" height="22"><path fill="#FEE500" d="M128 36C70.6 36 24 72.2 24 117c0 28.7 19.2 53.8 48.1 68.2-1.4 4.6-9 28-9.5 30.4 0 0-.2 1.6.9 2.2 1 .6 2.3.1 2.3.1 3.4-.5 39-25.4 45.1-29.5 5.6.8 11.3 1.2 17.1 1.2 57.4 0 104-36.2 104-81 0-44.8-46.6-72.6-104-72.6z"/></svg>
+          <span data-i18n="community.kakao.title"></span>
+        </h3>
+        <p data-i18n="community.kakao.desc"></p>
+        <a class="btn btn-kakao" href="http://pf.kakao.com/_xlLxlbX/friend" target="_blank" rel="noopener" data-i18n="community.kakao.cta"></a>
+      </div>
+      <div class="community-card">
+        <h3>
+          <svg viewBox="0 0 256 256" width="22" height="22"><path fill="#2ea043" d="M128 24C68.4 24 20 64.8 20 115c0 28.6 16.5 54 42.4 70.7-1.6 6-5.8 21.3-6.6 24.6-1 4-.4 6 3.7 4.8 3.2-.9 22.7-15.3 31.1-21 12.2 2 25 3 37.4 3 59.6 0 108-40.8 108-91s-48.4-91-108-91zm-44 80h24v18H84zm60 0h24v18h-24zm-30 0h24v18h-24z"/></svg>
+          <span data-i18n="community.openchat.title"></span>
+        </h3>
+        <p data-i18n="community.openchat.desc"></p>
+        <a class="btn btn-kakao" href="https://open.kakao.com/o/pvUHv1pi" target="_blank" rel="noopener" data-i18n="community.openchat.cta"></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="container">
+    <h2 data-i18n="why.heading"></h2>
+    <p data-i18n="why.p1"></p>
+    <p data-i18n="why.p2"></p>
+    <blockquote data-i18n="why.quote"></blockquote>
+    <p data-i18n="why.p3"></p>
+  </div>
+</section>
+
+<footer>
+  <p data-i18n="footer.title"></p>
+  <p data-i18n="footer.meta"></p>
+  <p>
+    <a href="https://wehome.me/trust/hangul">한국어판</a> ·
+    <a href="https://wehome.me/trust/hangul-en">English Edition</a> ·
+    <a href="https://wehome.me">wehome.me</a>
+  </p>
+</footer>
+
+<script>
+const I18N = {
+  ko: {
+    "brand": "한글정음",
+    "nav.hangulart": "한글아트",
+    "hero.title": "한글정음",
+    "hero.subtitle": "HANGUL · The Cosmic Philosophy",
+    "hero.tagline": "훈민정음 해례본을 한글로 옮기다. 한글은 단순한 알파벳이 아니라, <strong>○ △ □ — 하늘·사람·땅의 우주를 담은 기하학적 모형</strong>이다. 1446년, 세종대왕과 집현전 학자들이 그렇게 적었다.",
+    "hero.author": "조산구 엮음 · ISBN 979-11-89850-85-2",
+    "hero.download_primary": "한국어판 받기",
+    "hero.download_secondary": "English Edition",
+
+    "video.heading": "40초로 보는 한글정음",
+    "video.lead": "한글이 어떻게 우주의 세 도형에서 자라났는지, 짧은 영상으로 보여드립니다.",
+    "video.fullscreen": "전체 화면으로 보기 →",
+
+    "triad.heading": "세 가지 모양, 하나의 우주",
+    "triad.lead": "한글은 세 개의 근원 도형에서 출발한다. 원·세모·네모는 각각 하늘·사람·땅이며, 모든 닿소리와 홀소리가 여기서 자라난다.",
+    "triad.heaven.label": "하늘 · Circle",
+    "triad.heaven.en": "Heaven",
+    "triad.heaven.detail": "<strong>바탕 홀소리:</strong> ㆍ (점)<br><strong>밝이어:</strong> 밝음<br><strong>수:</strong> 1 / 0<br><strong>다움:</strong> 물 (겨울)<br><strong>파생:</strong> ㆁ ㅎ ㆆ",
+    "triad.human.label": "사람 · Triangle",
+    "triad.human.en": "Human",
+    "triad.human.detail": "<strong>바탕 홀소리:</strong> ㅣ (선)<br><strong>밝이어:</strong> 이음<br><strong>수:</strong> 3 / 1<br><strong>다움:</strong> 쇠 (가을)<br><strong>파생:</strong> ㅈ ㅊ ㅿ",
+    "triad.earth.label": "땅 · Square",
+    "triad.earth.en": "Earth",
+    "triad.earth.detail": "<strong>바탕 홀소리:</strong> ㅡ (선)<br><strong>밝이어:</strong> 어둠<br><strong>수:</strong> 2 / 2<br><strong>다움:</strong> 흙 (늦여름)<br><strong>파생:</strong> ㅂ ㅍ ㄱ ㅋ ㄴ ㄷ ㅌ ㄹ",
+
+    "deriv.heading": "스물여덟 자, 세 뿌리에서",
+    "deriv.lead": "정음 28자 전체가 세 도형에서 파생된다. 닿소리는 가획(덧그음)으로, 홀소리는 하늘(ㆍ)을 다른 선에 붙여 만든다.",
+    "deriv.tbl.vowel": "홀소리",
+    "deriv.tbl.compose": "구성",
+    "deriv.tbl.sound": "발음",
+    "deriv.v1": "점 — 하늘",
+    "deriv.v2": "수직선 — 사람",
+    "deriv.v3": "수평선 — 땅",
+    "deriv.v4": "· + ㅣ (사람과 결합)",
+    "deriv.v5": "· + ㅡ (땅과 결합)",
+    "deriv.foot": "하늘의 점 하나가 사람과 땅의 선에 더해져 <strong>11개의 가운뎃소리</strong>를 이룬다. 모든 홀소리에 하늘이 깃든 것은, 만물에 밝은 기운이 고르게 미친다는 우주관을 따른 것이다.",
+
+    "ch.heading": "차례",
+    "ch.lead": "17개 챕터. 별표(★)는 우주철학의 핵심 — 1. 창제원리.",
+
+    "sys.heading": "한글 전체 체계",
+    "sys.lead": "28자 정음 — 닿소리 17 + 홀소리 11. 세 도형의 우주에서 자라난 모든 소리.",
+    "sys.tbl.category": "분류",
+    "sys.tbl.letters": "글자",
+    "sys.tbl.roman": "로마자",
+    "sys.heaven": "하늘",
+    "sys.human": "사람",
+    "sys.earth": "땅",
+    "sys.v_base": "홀소리 바탕",
+    "sys.v_human": "홀소리 (사람결합)",
+    "sys.v_earth": "홀소리 (땅결합)",
+
+    "why.heading": "왜 우주철학인가",
+    "why.p1": "대부분의 문자 체계는 수백 년에 걸쳐 자연스럽게 진화했다. 한글은 <strong>한 세대 안에 설계</strong>되었고, 설계자들이 자신의 사고를 명문화한 문서를 남겼다.",
+    "why.p2": "그들이 적은 사고의 골자는 이렇다:",
+    "why.quote": "우주가 근본 원리 위에서 움직이고, 사람의 말소리 또한 그 우주의 일부라면, 참된 문자는 그 원리를 그대로 비추어야 한다. 단지 소리를 기록하는 도구가 아니라, 실재의 구조를 새기는 그릇이어야 한다.",
+    "why.p3": "그 결과, 한글은 모든 글자가 <strong>철학적 진술</strong>인 알파벳이 되었고, 전체로는 <strong>우주의 기하학적 모형</strong>이 되었다.",
+
+    "community.heading": "한글정음 커뮤니티",
+    "community.lead": "한글과 우주철학을 함께 나눌 사람들. 알림을 받는 채널과 대화를 나누는 오픈채팅, 두 곳을 함께 운영합니다.",
+    "community.kakao.title": "카카오톡 채널 — 알림 받기",
+    "community.kakao.desc": "한글 뉴스·전시·이벤트·정책을 매일 정리해 발송합니다. 친구추가만 하면 알림이 도착 — 가벼운 구독.",
+    "community.kakao.cta": "💛 카카오톡 친구추가",
+    "community.openchat.title": "오픈채팅 — 함께 대화",
+    "community.openchat.desc": "한글과 우주철학을 좋아하는 사람들의 실시간 토론방. 자료 공유, 행사 안내, 깊은 대화가 오갑니다.",
+    "community.openchat.cta": "💬 오픈채팅 입장",
+
+    "footer.title": "한글정음 — HANGUL, The Cosmic Philosophy",
+    "footer.meta": "조산구 엮음 · ISBN 979-11-89850-85-2 · UNESCO Memory of the World"
+  },
+  en: {
+    "brand": "HANGUL",
+    "nav.hangulart": "Hangul Art",
+    "hero.title": "HANGUL",
+    "hero.subtitle": "The Cosmic Philosophy",
+    "hero.tagline": "The Hunminjeongeum Haerye (1446), translated. Hangul is not merely an alphabet — it is a <strong>geometric model of the cosmos: ○ △ □, Heaven · Human · Earth</strong>. King Sejong and his scholars wrote so explicitly.",
+    "hero.author": "Edited by Jo, SanKu · ISBN 979-11-89850-85-2",
+    "hero.download_primary": "Download English Edition",
+    "hero.download_secondary": "한국어판",
+
+    "video.heading": "HANGUL in 40 Seconds",
+    "video.lead": "A short visual showing how the Korean alphabet grew from three cosmic shapes.",
+    "video.fullscreen": "Open in full screen →",
+
+    "triad.heading": "Three Shapes, One Cosmos",
+    "triad.lead": "Hangul begins with three primal forms. Circle, Triangle, and Square correspond to Heaven, Human, and Earth — and every consonant and vowel grows from them.",
+    "triad.heaven.label": "Heaven · Circle",
+    "triad.heaven.en": "Haneul / 하늘",
+    "triad.heaven.detail": "<strong>Root vowel:</strong> ㆍ (point)<br><strong>Light/Dark:</strong> Light<br><strong>Number:</strong> 1 / 0<br><strong>Five Movements:</strong> Water (Winter)<br><strong>Derived:</strong> ㆁ ㅎ ㆆ",
+    "triad.human.label": "Human · Triangle",
+    "triad.human.en": "Saram / 사람",
+    "triad.human.detail": "<strong>Root vowel:</strong> ㅣ (vertical line)<br><strong>Light/Dark:</strong> Connection<br><strong>Number:</strong> 3 / 1<br><strong>Five Movements:</strong> Metal (Autumn)<br><strong>Derived:</strong> ㅈ ㅊ ㅿ",
+    "triad.earth.label": "Earth · Square",
+    "triad.earth.en": "Ttang / 땅",
+    "triad.earth.detail": "<strong>Root vowel:</strong> ㅡ (horizontal line)<br><strong>Light/Dark:</strong> Darkness<br><strong>Number:</strong> 2 / 2<br><strong>Five Movements:</strong> Earth-element (Late Summer)<br><strong>Derived:</strong> ㅂ ㅍ ㄱ ㅋ ㄴ ㄷ ㅌ ㄹ",
+
+    "deriv.heading": "Twenty-Eight Letters, Three Roots",
+    "deriv.lead": "All 28 letters of Jeongeum derive from three shapes. Consonants by stroke addition; vowels by combining Heaven's dot with the other lines.",
+    "deriv.tbl.vowel": "Vowel",
+    "deriv.tbl.compose": "Composition",
+    "deriv.tbl.sound": "Sound",
+    "deriv.v1": "Point — Heaven",
+    "deriv.v2": "Vertical line — Human",
+    "deriv.v3": "Horizontal line — Earth",
+    "deriv.v4": "· + ㅣ (combined with Human)",
+    "deriv.v5": "· + ㅡ (combined with Earth)",
+    "deriv.foot": "Heaven's single dot, added to Human's and Earth's lines, generates <strong>all 11 vowels</strong>. That every vowel contains Heaven reflects a cosmology in which bright energy reaches all things evenly.",
+
+    "ch.heading": "Contents",
+    "ch.lead": "Seventeen chapters. The star (★) marks the cosmological heart — 1. Principles of Creation.",
+
+    "sys.heading": "The Complete Hangul System",
+    "sys.lead": "Jeongeum's 28 letters — 17 consonants + 11 vowels. Every sound grown from a three-shape cosmos.",
+    "sys.tbl.category": "Category",
+    "sys.tbl.letters": "Letters",
+    "sys.tbl.roman": "Romanization",
+    "sys.heaven": "Heaven",
+    "sys.human": "Human",
+    "sys.earth": "Earth",
+    "sys.v_base": "Vowel roots",
+    "sys.v_human": "Vowels (with Human)",
+    "sys.v_earth": "Vowels (with Earth)",
+
+    "why.heading": "Why Cosmic Philosophy?",
+    "why.p1": "Most writing systems evolved organically over centuries. Hangul was <strong>designed in one generation</strong>, and its designers left a document explaining exactly what they were thinking.",
+    "why.p2": "What they were thinking was this:",
+    "why.quote": "If the universe operates on fundamental principles, and if human speech is part of that universe, a true writing system must reflect those principles — not just record sounds, but encode the structure of reality itself.",
+    "why.p3": "The result: an alphabet where every letter is a <strong>philosophical statement</strong>, and the whole is a <strong>geometric model of the cosmos</strong>.",
+
+    "community.heading": "HANGUL Community",
+    "community.lead": "A circle of Hangul and cosmic-philosophy readers, on KakaoTalk (Korea's main messenger). One channel for updates, one open chat for conversation.",
+    "community.kakao.title": "KakaoTalk Channel — Get Updates",
+    "community.kakao.desc": "Daily curated news, exhibitions, events, and policies on Hangul. Just add as friend to receive — lightweight subscription. Content in Korean.",
+    "community.kakao.cta": "💛 Add KakaoTalk Channel",
+    "community.openchat.title": "Open Chat — Join the Talk",
+    "community.openchat.desc": "Real-time discussion room for those who love Hangul and cosmic philosophy. Share resources, get event news, have deeper conversations. In Korean.",
+    "community.openchat.cta": "💬 Enter Open Chat",
+
+    "footer.title": "HANGUL — The Cosmic Philosophy",
+    "footer.meta": "Edited by Jo, SanKu · ISBN 979-11-89850-85-2 · UNESCO Memory of the World"
+  },
+  zh: {
+    "brand": "HANGUL",
+    "nav.hangulart": "韓字藝術",
+    "hero.title": "HANGUL",
+    "hero.subtitle": "宇宙哲學 · The Cosmic Philosophy",
+    "hero.tagline": "《訓民正音解例本》之譯解。韓字非僅為字母——其乃 <strong>○ △ □：天 · 人 · 地之宇宙幾何模型</strong>。1446年，世宗大王與集賢殿學士明書其理。",
+    "hero.author": "趙山九 編 · ISBN 979-11-89850-85-2",
+    "hero.download_primary": "下載英文版",
+    "hero.download_secondary": "韓文版",
+
+    "video.heading": "40 秒看懂 HANGUL",
+    "video.lead": "短片：韓字如何從宇宙三形中生長而出。",
+    "video.fullscreen": "全螢幕觀看 →",
+
+    "triad.heading": "三形一宇",
+    "triad.lead": "韓字源於三本元之形。圓·三角·方分屬天·人·地，所有子音母音皆自此而生。",
+    "triad.heaven.label": "天 · 圓",
+    "triad.heaven.en": "Heaven / 하늘",
+    "triad.heaven.detail": "<strong>本元母音：</strong> ㆍ（點）<br><strong>明連暗：</strong> 明<br><strong>數：</strong> 1 / 0<br><strong>五行：</strong> 水（冬）<br><strong>派生：</strong> ㆁ ㅎ ㆆ",
+    "triad.human.label": "人 · 三角",
+    "triad.human.en": "Human / 사람",
+    "triad.human.detail": "<strong>本元母音：</strong> ㅣ（豎線）<br><strong>明連暗：</strong> 連<br><strong>數：</strong> 3 / 1<br><strong>五行：</strong> 金（秋）<br><strong>派生：</strong> ㅈ ㅊ ㅿ",
+    "triad.earth.label": "地 · 方",
+    "triad.earth.en": "Earth / 땅",
+    "triad.earth.detail": "<strong>本元母音：</strong> ㅡ（橫線）<br><strong>明連暗：</strong> 暗<br><strong>數：</strong> 2 / 2<br><strong>五行：</strong> 土（長夏）<br><strong>派生：</strong> ㅂ ㅍ ㄱ ㅋ ㄴ ㄷ ㅌ ㄹ",
+
+    "deriv.heading": "廿八字，三本根",
+    "deriv.lead": "正音二十八字全自三形派生。子音加畫，母音則以天之點配於他線。",
+    "deriv.tbl.vowel": "母音",
+    "deriv.tbl.compose": "構成",
+    "deriv.tbl.sound": "音",
+    "deriv.v1": "點 — 天",
+    "deriv.v2": "豎線 — 人",
+    "deriv.v3": "橫線 — 地",
+    "deriv.v4": "· + ㅣ（與人結合）",
+    "deriv.v5": "· + ㅡ（與地結合）",
+    "deriv.foot": "天之一點，加於人地之線，生成 <strong>十一中聲</strong>。母音皆含天，乃宇宙觀之體現：明氣均布萬物。",
+
+    "ch.heading": "目錄",
+    "ch.lead": "共十七章。★ 標示宇宙哲學之核心——一、制字解。",
+
+    "sys.heading": "韓字全體系",
+    "sys.lead": "正音廿八字——子音十七 + 母音十一。皆源於三形之宇宙。",
+    "sys.tbl.category": "類別",
+    "sys.tbl.letters": "字母",
+    "sys.tbl.roman": "羅馬字",
+    "sys.heaven": "天",
+    "sys.human": "人",
+    "sys.earth": "地",
+    "sys.v_base": "母音本元",
+    "sys.v_human": "母音（與人）",
+    "sys.v_earth": "母音（與地）",
+
+    "why.heading": "何以為宇宙哲學？",
+    "why.p1": "多數文字系統歷數百年自然演化。韓字 <strong>一代之間設計而成</strong>，其設計者留下明書其思之文獻。",
+    "why.p2": "其思之核心如此：",
+    "why.quote": "若宇宙依本根之理而運，人聲亦為此宇宙之一部，則真正之文字當映其理——非僅記音，而當載實在之構造。",
+    "why.p3": "於是韓字成為每字皆是 <strong>哲學陳述</strong> 之字母系統，整體則為 <strong>宇宙之幾何模型</strong>。",
+
+    "community.heading": "HANGUL 社群",
+    "community.lead": "與熱愛韓字與宇宙哲學的同好相聚於 KakaoTalk（韓國主要通訊軟體）。一個頻道接收通知，一個開放聊天室共同對話。",
+    "community.kakao.title": "KakaoTalk 頻道 — 接收通知",
+    "community.kakao.desc": "每日精選韓字新聞、展覽、活動與政策。加為好友即可收到通知 — 輕量訂閱。內容為韓文。",
+    "community.kakao.cta": "💛 加入 KakaoTalk 頻道",
+    "community.openchat.title": "開放聊天室 — 一起對話",
+    "community.openchat.desc": "熱愛韓字與宇宙哲學者的即時討論室。分享資料、活動訊息、深度對話。語言為韓文。",
+    "community.openchat.cta": "💬 進入開放聊天室",
+
+    "footer.title": "HANGUL — 宇宙哲學",
+    "footer.meta": "趙山九 編 · ISBN 979-11-89850-85-2 · UNESCO 世界記錄遺產"
+  },
+  ja: {
+    "brand": "HANGUL",
+    "nav.hangulart": "ハングルアート",
+    "hero.title": "HANGUL",
+    "hero.subtitle": "宇宙の哲学 · The Cosmic Philosophy",
+    "hero.tagline": "『訓民正音解例本』を訳す。ハングルは単なるアルファベットではない——<strong>○ △ □：天・人・地という宇宙を映す幾何学的モデル</strong>である。1446年、世宗大王と集賢殿の学者たちはそう明記した。",
+    "hero.author": "趙山九 編 · ISBN 979-11-89850-85-2",
+    "hero.download_primary": "英語版をダウンロード",
+    "hero.download_secondary": "韓国語版",
+
+    "video.heading": "40 秒で見る HANGUL",
+    "video.lead": "ハングルがどのように宇宙の三つの形から生まれたか、短い映像でご紹介します。",
+    "video.fullscreen": "全画面で見る →",
+
+    "triad.heading": "三つの形、一つの宇宙",
+    "triad.lead": "ハングルは三つの根源的な形から始まる。円・三角・四角はそれぞれ天・人・地に対応し、すべての子音と母音はここから派生する。",
+    "triad.heaven.label": "天 · 円",
+    "triad.heaven.en": "Heaven / 하늘",
+    "triad.heaven.detail": "<strong>基本母音：</strong> ㆍ（点）<br><strong>明連暗：</strong> 明<br><strong>数：</strong> 1 / 0<br><strong>五行：</strong> 水（冬）<br><strong>派生：</strong> ㆁ ㅎ ㆆ",
+    "triad.human.label": "人 · 三角",
+    "triad.human.en": "Human / 사람",
+    "triad.human.detail": "<strong>基本母音：</strong> ㅣ（縦線）<br><strong>明連暗：</strong> 連<br><strong>数：</strong> 3 / 1<br><strong>五行：</strong> 金（秋）<br><strong>派生：</strong> ㅈ ㅊ ㅿ",
+    "triad.earth.label": "地 · 四角",
+    "triad.earth.en": "Earth / 땅",
+    "triad.earth.detail": "<strong>基本母音：</strong> ㅡ（横線）<br><strong>明連暗：</strong> 暗<br><strong>数：</strong> 2 / 2<br><strong>五行：</strong> 土（晩夏）<br><strong>派生：</strong> ㅂ ㅍ ㄱ ㅋ ㄴ ㄷ ㅌ ㄹ",
+
+    "deriv.heading": "二十八字、三つの根から",
+    "deriv.lead": "正音二十八字すべてが三つの形から派生する。子音は加画によって、母音は天の点を他の線に重ねて作られる。",
+    "deriv.tbl.vowel": "母音",
+    "deriv.tbl.compose": "構成",
+    "deriv.tbl.sound": "発音",
+    "deriv.v1": "点 — 天",
+    "deriv.v2": "縦線 — 人",
+    "deriv.v3": "横線 — 地",
+    "deriv.v4": "· + ㅣ（人との結合）",
+    "deriv.v5": "· + ㅡ（地との結合）",
+    "deriv.foot": "天の一点が人と地の線に加わり、<strong>11の中声</strong>が生まれる。すべての母音に天が宿るのは、明るい気がすべての物に等しく及ぶという宇宙観の表れである。",
+
+    "ch.heading": "目次",
+    "ch.lead": "全17章。★ は宇宙哲学の核心 — 1. 制字原理。",
+
+    "sys.heading": "ハングル全体系",
+    "sys.lead": "正音二十八字 — 子音17 + 母音11。すべての音は三つの形の宇宙から生まれる。",
+    "sys.tbl.category": "分類",
+    "sys.tbl.letters": "字母",
+    "sys.tbl.roman": "ローマ字",
+    "sys.heaven": "天",
+    "sys.human": "人",
+    "sys.earth": "地",
+    "sys.v_base": "母音の基本",
+    "sys.v_human": "母音（人との結合）",
+    "sys.v_earth": "母音（地との結合）",
+
+    "why.heading": "なぜ宇宙の哲学か",
+    "why.p1": "多くの文字体系は数百年をかけて自然に進化した。ハングルは <strong>一世代のうちに設計され</strong>、その設計者たちは自らの思考を明文化した文書を残した。",
+    "why.p2": "彼らが書いた思考の核心はこうである:",
+    "why.quote": "宇宙が根本原理に従って動き、人の声もまたその宇宙の一部であるならば、真の文字はその原理を映し出すべきである — 音を記録するだけの道具ではなく、実在の構造を刻む器であるべきだ。",
+    "why.p3": "その結果、ハングルはすべての文字が <strong>哲学的命題</strong> であるアルファベットとなり、全体としては <strong>宇宙の幾何学的モデル</strong> となった。",
+
+    "community.heading": "HANGUL コミュニティ",
+    "community.lead": "ハングルと宇宙哲学を共に語る仲間たちが KakaoTalk（韓国の主要メッセンジャー）に集います。通知を受けるチャンネルと、対話を楽しむオープンチャットの二本立て。",
+    "community.kakao.title": "KakaoTalk チャンネル — お知らせ受信",
+    "community.kakao.desc": "ハングルのニュース・展示・イベント・政策を毎日キュレーション。友だち追加で通知を受信 — 軽い購読。配信内容は韓国語。",
+    "community.kakao.cta": "💛 KakaoTalk チャンネルを友だち追加",
+    "community.openchat.title": "オープンチャット — 一緒に対話",
+    "community.openchat.desc": "ハングルと宇宙哲学を愛する人々のリアルタイム議論部屋。資料共有、イベント情報、深い対話が交わされます。言語は韓国語。",
+    "community.openchat.cta": "💬 オープンチャットに入室",
+
+    "footer.title": "HANGUL — 宇宙の哲学",
+    "footer.meta": "趙山九 編 · ISBN 979-11-89850-85-2 · UNESCO 世界記録遺産"
+  },
+  es: {
+    "brand": "HANGUL",
+    "nav.hangulart": "Hangul Art",
+    "hero.title": "HANGUL",
+    "hero.subtitle": "La Filosofía Cósmica · The Cosmic Philosophy",
+    "hero.tagline": "El Hunminjeongeum Haerye (1446), traducido. El hangul no es un mero alfabeto: es un <strong>modelo geométrico del cosmos: ○ △ □, Cielo · Humano · Tierra</strong>. Así lo dejó escrito el rey Sejong y sus eruditos.",
+    "hero.author": "Editado por Jo, SanKu · ISBN 979-11-89850-85-2",
+    "hero.download_primary": "Descargar edición en inglés",
+    "hero.download_secondary": "Edición coreana",
+
+    "video.heading": "HANGUL en 40 segundos",
+    "video.lead": "Un vídeo breve que muestra cómo el alfabeto coreano creció a partir de tres formas cósmicas.",
+    "video.fullscreen": "Abrir en pantalla completa →",
+
+    "triad.heading": "Tres formas, un cosmos",
+    "triad.lead": "El hangul nace de tres formas primordiales. Círculo, triángulo y cuadrado corresponden a Cielo, Humano y Tierra — y todas las consonantes y vocales brotan de ellas.",
+    "triad.heaven.label": "Cielo · Círculo",
+    "triad.heaven.en": "Heaven / 하늘",
+    "triad.heaven.detail": "<strong>Vocal raíz:</strong> ㆍ (punto)<br><strong>Luz/Oscuridad:</strong> Luz<br><strong>Número:</strong> 1 / 0<br><strong>Cinco movimientos:</strong> Agua (Invierno)<br><strong>Derivadas:</strong> ㆁ ㅎ ㆆ",
+    "triad.human.label": "Humano · Triángulo",
+    "triad.human.en": "Human / 사람",
+    "triad.human.detail": "<strong>Vocal raíz:</strong> ㅣ (línea vertical)<br><strong>Luz/Oscuridad:</strong> Conexión<br><strong>Número:</strong> 3 / 1<br><strong>Cinco movimientos:</strong> Metal (Otoño)<br><strong>Derivadas:</strong> ㅈ ㅊ ㅿ",
+    "triad.earth.label": "Tierra · Cuadrado",
+    "triad.earth.en": "Earth / 땅",
+    "triad.earth.detail": "<strong>Vocal raíz:</strong> ㅡ (línea horizontal)<br><strong>Luz/Oscuridad:</strong> Oscuridad<br><strong>Número:</strong> 2 / 2<br><strong>Cinco movimientos:</strong> Tierra-elemento (Fin del verano)<br><strong>Derivadas:</strong> ㅂ ㅍ ㄱ ㅋ ㄴ ㄷ ㅌ ㄹ",
+
+    "deriv.heading": "Veintiocho letras, tres raíces",
+    "deriv.lead": "Las 28 letras del Jeongeum derivan de las tres formas. Las consonantes por adición de trazos; las vocales por la combinación del punto del Cielo con las otras líneas.",
+    "deriv.tbl.vowel": "Vocal",
+    "deriv.tbl.compose": "Composición",
+    "deriv.tbl.sound": "Sonido",
+    "deriv.v1": "Punto — Cielo",
+    "deriv.v2": "Línea vertical — Humano",
+    "deriv.v3": "Línea horizontal — Tierra",
+    "deriv.v4": "· + ㅣ (con el Humano)",
+    "deriv.v5": "· + ㅡ (con la Tierra)",
+    "deriv.foot": "El único punto del Cielo, añadido a las líneas del Humano y la Tierra, genera <strong>las 11 vocales</strong>. Que toda vocal contenga al Cielo refleja una cosmología en la que la energía luminosa alcanza por igual a todas las cosas.",
+
+    "ch.heading": "Índice",
+    "ch.lead": "Diecisiete capítulos. La estrella (★) marca el corazón cosmológico — 1. Principios de la Creación.",
+
+    "sys.heading": "Sistema completo del Hangul",
+    "sys.lead": "28 letras del Jeongeum — 17 consonantes + 11 vocales. Cada sonido brota de un cosmos de tres formas.",
+    "sys.tbl.category": "Categoría",
+    "sys.tbl.letters": "Letras",
+    "sys.tbl.roman": "Romanización",
+    "sys.heaven": "Cielo",
+    "sys.human": "Humano",
+    "sys.earth": "Tierra",
+    "sys.v_base": "Vocales raíz",
+    "sys.v_human": "Vocales (con Humano)",
+    "sys.v_earth": "Vocales (con Tierra)",
+
+    "why.heading": "¿Por qué una filosofía cósmica?",
+    "why.p1": "La mayoría de los sistemas de escritura evolucionaron de forma orgánica a lo largo de siglos. El hangul fue <strong>diseñado en una sola generación</strong>, y sus diseñadores dejaron un documento explicando exactamente lo que pensaban.",
+    "why.p2": "Lo que pensaban era esto:",
+    "why.quote": "Si el universo opera según principios fundamentales, y si el habla humana es parte de ese universo, una verdadera escritura debe reflejar esos principios — no solo registrar sonidos, sino codificar la estructura misma de la realidad.",
+    "why.p3": "El resultado: un alfabeto donde cada letra es una <strong>afirmación filosófica</strong>, y el conjunto es un <strong>modelo geométrico del cosmos</strong>.",
+
+    "community.heading": "Comunidad HANGUL",
+    "community.lead": "Un círculo de lectores del hangul y la filosofía cósmica en KakaoTalk (el principal mensajero de Corea). Un canal para recibir avisos y un chat abierto para conversar.",
+    "community.kakao.title": "Canal de KakaoTalk — Avisos",
+    "community.kakao.desc": "Noticias diarias seleccionadas sobre hangul: exposiciones, eventos y políticas. Solo añade como amigo para recibir las alertas. Contenido en coreano.",
+    "community.kakao.cta": "💛 Añadir canal de KakaoTalk",
+    "community.openchat.title": "Chat abierto — Conversa",
+    "community.openchat.desc": "Sala de discusión en tiempo real para quienes aman el hangul y la filosofía cósmica. Comparte recursos, recibe noticias de eventos, ten conversaciones profundas. En coreano.",
+    "community.openchat.cta": "💬 Entrar al chat abierto",
+
+    "footer.title": "HANGUL — La Filosofía Cósmica",
+    "footer.meta": "Editado por Jo, SanKu · ISBN 979-11-89850-85-2 · Memoria del Mundo de la UNESCO"
+  },
+  ar: {
+    "brand": "HANGUL",
+    "nav.hangulart": "فن الهانغُل",
+    "hero.title": "HANGUL",
+    "hero.subtitle": "الفلسفة الكونية · The Cosmic Philosophy",
+    "hero.tagline": "ترجمة <em>هونمين جونغوم هاييريه</em> (1446). الهانغُل ليس مجرد أبجدية، بل هو <strong>نموذجٌ هندسيٌّ للكون: ○ △ □، السماء · الإنسان · الأرض</strong>. هكذا دوّنه الملك سيجونغ وعلماؤه عام 1446.",
+    "hero.author": "إعداد جو، سان-كو · ISBN 979-11-89850-85-2",
+    "hero.download_primary": "تحميل النسخة الإنجليزية",
+    "hero.download_secondary": "النسخة الكورية",
+
+    "video.heading": "HANGUL في 40 ثانية",
+    "video.lead": "فيديو قصير يُظهر كيف نشأت الأبجدية الكورية من ثلاثة أشكال كونية.",
+    "video.fullscreen": "فتح بملء الشاشة →",
+
+    "triad.heading": "ثلاثة أشكال، كونٌ واحد",
+    "triad.lead": "ينطلق الهانغُل من ثلاثة أشكال أساسية. الدائرة والمثلث والمربع تقابل السماء والإنسان والأرض — ومنها تنبثق جميع الحروف الصامتة والصائتة.",
+    "triad.heaven.label": "السماء · دائرة",
+    "triad.heaven.en": "Heaven / 하늘",
+    "triad.heaven.detail": "<strong>الصائتة الأصلية:</strong> ㆍ (نقطة)<br><strong>النور/الظلام:</strong> نور<br><strong>الرقم:</strong> 1 / 0<br><strong>الحركات الخمس:</strong> الماء (الشتاء)<br><strong>المشتقات:</strong> ㆁ ㅎ ㆆ",
+    "triad.human.label": "الإنسان · مثلث",
+    "triad.human.en": "Human / 사람",
+    "triad.human.detail": "<strong>الصائتة الأصلية:</strong> ㅣ (خط عمودي)<br><strong>النور/الظلام:</strong> اتّصال<br><strong>الرقم:</strong> 3 / 1<br><strong>الحركات الخمس:</strong> المعدن (الخريف)<br><strong>المشتقات:</strong> ㅈ ㅊ ㅿ",
+    "triad.earth.label": "الأرض · مربع",
+    "triad.earth.en": "Earth / 땅",
+    "triad.earth.detail": "<strong>الصائتة الأصلية:</strong> ㅡ (خط أفقي)<br><strong>النور/الظلام:</strong> ظلام<br><strong>الرقم:</strong> 2 / 2<br><strong>الحركات الخمس:</strong> التراب (آخر الصيف)<br><strong>المشتقات:</strong> ㅂ ㅍ ㄱ ㅋ ㄴ ㄷ ㅌ ㄹ",
+
+    "deriv.heading": "ثمانية وعشرون حرفًا من ثلاثة جذور",
+    "deriv.lead": "تشتقّ حروف جونغوم الثمانية والعشرون كلّها من ثلاثة أشكال. الصوامت بإضافة الخطوط، والصوائت بضمّ نقطة السماء إلى الخطوط الأخرى.",
+    "deriv.tbl.vowel": "الصائتة",
+    "deriv.tbl.compose": "التركيب",
+    "deriv.tbl.sound": "الصوت",
+    "deriv.v1": "نقطة — السماء",
+    "deriv.v2": "خط عمودي — الإنسان",
+    "deriv.v3": "خط أفقي — الأرض",
+    "deriv.v4": "· + ㅣ (مع الإنسان)",
+    "deriv.v5": "· + ㅡ (مع الأرض)",
+    "deriv.foot": "نقطة السماء الواحدة، إذا أُضيفت إلى خطّي الإنسان والأرض، تولّد <strong>الصوائت الإحدى عشرة</strong> جميعها. كون السماء حاضرة في كل صائتة هو انعكاس لرؤية كونية تَنتشر فيها طاقة النور بالتساوي على جميع الأشياء.",
+
+    "ch.heading": "الفهرس",
+    "ch.lead": "سبعة عشر فصلًا. تشير النجمة (★) إلى قلب الفلسفة الكونية — 1. مبادئ الإبداع.",
+
+    "sys.heading": "نظام الهانغُل الكامل",
+    "sys.lead": "ثمانية وعشرون حرفًا — 17 صامتة + 11 صائتة. كلّ صوت نابعٌ من كونٍ ذي ثلاثة أشكال.",
+    "sys.tbl.category": "التصنيف",
+    "sys.tbl.letters": "الحروف",
+    "sys.tbl.roman": "اللاتيني",
+    "sys.heaven": "السماء",
+    "sys.human": "الإنسان",
+    "sys.earth": "الأرض",
+    "sys.v_base": "جذور الصوائت",
+    "sys.v_human": "صوائت (مع الإنسان)",
+    "sys.v_earth": "صوائت (مع الأرض)",
+
+    "why.heading": "لماذا فلسفة كونية؟",
+    "why.p1": "تطوّرت معظم نظم الكتابة عضويًّا عبر القرون. أمّا الهانغُل فقد <strong>صُمّم في جيلٍ واحد</strong>، وترك مصمّموه وثيقةً تشرح بدقّةٍ ما كانوا يفكّرون فيه.",
+    "why.p2": "ما كانوا يفكّرون فيه هو هذا:",
+    "why.quote": "إذا كان الكون يسير وفق مبادئ أساسية، وكان كلام الإنسان جزءًا من هذا الكون، فإنّ نظام كتابةٍ حقيقي ينبغي أن يعكس تلك المبادئ — لا أن يكون مجرد أداةٍ لتسجيل الأصوات، بل وعاءً يحفر فيه نسيج الواقع نفسه.",
+    "why.p3": "والنتيجة: أبجديةٌ كلّ حرفٍ فيها قَولٌ <strong>فلسفي</strong>، ومجموعها <strong>نموذجٌ هندسيٌّ للكون</strong>.",
+
+    "community.heading": "مجتمع HANGUL",
+    "community.lead": "حلقةٌ من قرّاء الهانغُل والفلسفة الكونية على KakaoTalk (تطبيق التراسل الرئيسي في كوريا). قناة لتلقّي التنبيهات، ودردشة مفتوحة للحوار.",
+    "community.kakao.title": "قناة KakaoTalk — التنبيهات",
+    "community.kakao.desc": "أخبار يومية مختارة عن الهانغُل: المعارض، الفعاليات، والسياسات. أضف القناة كصديق لتصلك التنبيهات. المحتوى باللغة الكورية.",
+    "community.kakao.cta": "💛 إضافة قناة KakaoTalk",
+    "community.openchat.title": "الدردشة المفتوحة — تحدّث معنا",
+    "community.openchat.desc": "غرفة حوار آنية لمحبّي الهانغُل والفلسفة الكونية. مشاركة المصادر، أخبار الفعاليات، وحوارات أعمق. باللغة الكورية.",
+    "community.openchat.cta": "💬 الدخول إلى الدردشة المفتوحة",
+
+    "footer.title": "هانغُل — الفلسفة الكونية",
+    "footer.meta": "إعداد جو، سان-كو · ISBN 979-11-89850-85-2 · ذاكرة العالم لليونسكو"
+  }
+};
+
+const CHAPTERS = {
+  ko: [
+    { n: "00", title: "표지 · 머리말", pages: "1–12쪽" },
+    { n: "01", title: "훈민정음 본문 — 세종대왕", pages: "13–40쪽" },
+    { n: "02", title: "차례 · 한글, 우주 비밀 코드 머리", pages: "41–52쪽" },
+    { n: "03 ★", title: "정음 풀이 1. 창제원리", pages: "53–147쪽 · 우주철학의 핵심", star: true },
+    { n: "04", title: "2. 첫소리글자 풀이", pages: "149–153쪽" },
+    { n: "05", title: "3. 가운뎃소리글자 풀이", pages: "155–165쪽" },
+    { n: "06", title: "4. 끝소리글자 풀이", pages: "167–178쪽" },
+    { n: "07", title: "5. 첫가끝 이룸 풀이", pages: "179–194쪽" },
+    { n: "08", title: "6. 낱글자 사용 보기", pages: "195–211쪽" },
+    { n: "09", title: "맺음말 — 정인지", pages: "213–226쪽" },
+    { n: "10", title: "보탬 — 일러두기", pages: "227–242쪽" },
+    { n: "11", title: "보탬 — 덧풀이", pages: "243–276쪽" },
+    { n: "12", title: "보탬 — 더보기", pages: "277–312쪽" },
+    { n: "13", title: "보탬 — 한글의 원형", pages: "313–326쪽" },
+    { n: "14", title: "보탬 — 한글아트", pages: "327–354쪽" },
+    { n: "15", title: "보탬 — 시므 스스로 한글", pages: "355–368쪽" },
+    { n: "16", title: "보탬 — 연혁 · 참고 · 엮은이", pages: "369–388쪽" }
+  ],
+  en: [
+    { n: "00", title: "Cover · Foreword", pages: "pp. 1–12" },
+    { n: "01", title: "Hunminjeongeum Original — King Sejong", pages: "pp. 13–44" },
+    { n: "02", title: "Contents · Introduction", pages: "pp. 45–62" },
+    { n: "03 ★", title: "Jeongeum Explanation 1. Principles of Creation", pages: "pp. 63–170 · cosmological heart", star: true },
+    { n: "04", title: "2. Initial Consonants", pages: "pp. 171–177" },
+    { n: "05", title: "3. Medial Vowels", pages: "pp. 179–191" },
+    { n: "06", title: "4. Final Consonants", pages: "pp. 193–205" },
+    { n: "07", title: "5. Three-Sound Harmony", pages: "pp. 207–225" },
+    { n: "08", title: "6. Examples of Letter Usage", pages: "pp. 227–243" },
+    { n: "09", title: "Postscript — Jeong Inji", pages: "pp. 245–258" },
+    { n: "10", title: "Appendix — Guide Notice", pages: "pp. 259–279" },
+    { n: "11", title: "Appendix — Additional Explanation", pages: "pp. 281–321" },
+    { n: "12", title: "Appendix — Supplementary Information", pages: "pp. 323–355" },
+    { n: "13", title: "Appendix — Origin of Hangul", pages: "pp. 357–371" },
+    { n: "14", title: "Appendix — Hangul Art", pages: "pp. 373–399" },
+    { n: "15", title: "Appendix — Sime (Self-Hangul)", pages: "pp. 401–413" },
+    { n: "16", title: "References · Editor · Closing", pages: "pp. 415–428" }
+  ],
+  zh: [
+    { n: "00", title: "封面 · 前言", pages: "第 1–12 頁" },
+    { n: "01", title: "訓民正音本文 — 世宗大王", pages: "第 13–44 頁" },
+    { n: "02", title: "目錄 · 緒論", pages: "第 45–62 頁" },
+    { n: "03 ★", title: "正音解 一、制字原理", pages: "第 63–170 頁 · 宇宙哲學之核心", star: true },
+    { n: "04", title: "二、初聲解", pages: "第 171–177 頁" },
+    { n: "05", title: "三、中聲解", pages: "第 179–191 頁" },
+    { n: "06", title: "四、終聲解", pages: "第 193–205 頁" },
+    { n: "07", title: "五、合字解", pages: "第 207–225 頁" },
+    { n: "08", title: "六、用字例", pages: "第 227–243 頁" },
+    { n: "09", title: "跋文 — 鄭麟趾", pages: "第 245–258 頁" },
+    { n: "10", title: "附錄 — 凡例", pages: "第 259–279 頁" },
+    { n: "11", title: "附錄 — 補釋", pages: "第 281–321 頁" },
+    { n: "12", title: "附錄 — 補充說明", pages: "第 323–355 頁" },
+    { n: "13", title: "附錄 — 韓字之原型", pages: "第 357–371 頁" },
+    { n: "14", title: "附錄 — 韓字藝術", pages: "第 373–399 頁" },
+    { n: "15", title: "附錄 — 시므 自學韓字", pages: "第 401–413 頁" },
+    { n: "16", title: "參考文獻 · 編者 · 版權", pages: "第 415–428 頁" }
+  ],
+  ja: [
+    { n: "00", title: "表紙 · 序", pages: "1–12 ページ" },
+    { n: "01", title: "訓民正音原文 — 世宗大王", pages: "13–44 ページ" },
+    { n: "02", title: "目次 · 序章", pages: "45–62 ページ" },
+    { n: "03 ★", title: "正音解 一、制字解", pages: "63–170 ページ · 宇宙哲学の核心", star: true },
+    { n: "04", title: "二、初声解", pages: "171–177 ページ" },
+    { n: "05", title: "三、中声解", pages: "179–191 ページ" },
+    { n: "06", title: "四、終声解", pages: "193–205 ページ" },
+    { n: "07", title: "五、合字解", pages: "207–225 ページ" },
+    { n: "08", title: "六、用字例", pages: "227–243 ページ" },
+    { n: "09", title: "跋文 — 鄭麟趾", pages: "245–258 ページ" },
+    { n: "10", title: "附録 — 凡例", pages: "259–279 ページ" },
+    { n: "11", title: "附録 — 補釈", pages: "281–321 ページ" },
+    { n: "12", title: "附録 — 補足情報", pages: "323–355 ページ" },
+    { n: "13", title: "附録 — ハングルの原型", pages: "357–371 ページ" },
+    { n: "14", title: "附録 — ハングルアート", pages: "373–399 ページ" },
+    { n: "15", title: "附録 — 시므 ハングル独学", pages: "401–413 ページ" },
+    { n: "16", title: "参考文献 · 編者 · 奥付", pages: "415–428 ページ" }
+  ],
+  es: [
+    { n: "00", title: "Portada · Prefacio", pages: "pp. 1–12" },
+    { n: "01", title: "Hunminjeongeum original — Rey Sejong", pages: "pp. 13–44" },
+    { n: "02", title: "Índice · Introducción", pages: "pp. 45–62" },
+    { n: "03 ★", title: "Explicación del Jeongeum 1. Principios de la Creación", pages: "pp. 63–170 · corazón cosmológico", star: true },
+    { n: "04", title: "2. Consonantes iniciales", pages: "pp. 171–177" },
+    { n: "05", title: "3. Vocales mediales", pages: "pp. 179–191" },
+    { n: "06", title: "4. Consonantes finales", pages: "pp. 193–205" },
+    { n: "07", title: "5. Armonía de los tres sonidos", pages: "pp. 207–225" },
+    { n: "08", title: "6. Ejemplos de uso de letras", pages: "pp. 227–243" },
+    { n: "09", title: "Postscriptum — Jeong Inji", pages: "pp. 245–258" },
+    { n: "10", title: "Apéndice — Notas del traductor", pages: "pp. 259–279" },
+    { n: "11", title: "Apéndice — Explicaciones adicionales", pages: "pp. 281–321" },
+    { n: "12", title: "Apéndice — Información complementaria", pages: "pp. 323–355" },
+    { n: "13", title: "Apéndice — Origen del hangul", pages: "pp. 357–371" },
+    { n: "14", title: "Apéndice — Hangul Art", pages: "pp. 373–399" },
+    { n: "15", title: "Apéndice — Sime: hangul por uno mismo", pages: "pp. 401–413" },
+    { n: "16", title: "Referencias · Editor · Cierre", pages: "pp. 415–428" }
+  ],
+  ar: [
+    { n: "00", title: "الغلاف · المقدمة", pages: "الصفحات 1–12" },
+    { n: "01", title: "نصّ هونمين جونغوم — الملك سيجونغ", pages: "الصفحات 13–44" },
+    { n: "02", title: "الفهرس · التقديم", pages: "الصفحات 45–62" },
+    { n: "03 ★", title: "شرح الجونغوم 1. مبادئ الإبداع", pages: "الصفحات 63–170 · جوهر الفلسفة الكونية", star: true },
+    { n: "04", title: "2. الصوامت الأولى", pages: "الصفحات 171–177" },
+    { n: "05", title: "3. الصوائت الوسطى", pages: "الصفحات 179–191" },
+    { n: "06", title: "4. الصوامت النهائية", pages: "الصفحات 193–205" },
+    { n: "07", title: "5. توافق الأصوات الثلاثة", pages: "الصفحات 207–225" },
+    { n: "08", title: "6. أمثلة استعمال الحروف", pages: "الصفحات 227–243" },
+    { n: "09", title: "خاتمة — جونغ إن-جي", pages: "الصفحات 245–258" },
+    { n: "10", title: "ملحق — ملاحظات المترجم", pages: "الصفحات 259–279" },
+    { n: "11", title: "ملحق — توضيحات إضافية", pages: "الصفحات 281–321" },
+    { n: "12", title: "ملحق — معلومات تكميلية", pages: "الصفحات 323–355" },
+    { n: "13", title: "ملحق — أصل الهانغُل", pages: "الصفحات 357–371" },
+    { n: "14", title: "ملحق — فنّ الهانغُل", pages: "الصفحات 373–399" },
+    { n: "15", title: "ملحق — سيمي: تعلّم الهانغُل بنفسك", pages: "الصفحات 401–413" },
+    { n: "16", title: "المراجع · المحرّر · الإغلاق", pages: "الصفحات 415–428" }
+  ]
+};
+
+const CHAPTER_FILES_KO = [
+  "00-cover-intro", "01-hunminjeongeum-sejong", "02-toc-and-intro",
+  "03-1-changje-wonri", "04-2-cheotsori-puri", "05-3-gaundetsori-puri",
+  "06-4-kkeutsori-puri", "07-5-cheotgakkeut-irum", "08-6-natgeulja-sayong",
+  "09-matumal-jeong-inji", "10-botaem-illeoddugi", "11-botaem-deotpuri",
+  "12-botaem-deobogi", "13-botaem-hangul-wonhyeong", "14-botaem-hangul-art",
+  "15-botaem-sime-seuseuro", "16-botaem-yeonhyeok-closing"
+];
+
+const CHAPTER_FILES_EN = [
+  "00-cover-intro", "01-hunminjeongeum-sejong", "02-toc-and-intro",
+  "03-1-principles-creation", "04-2-initial-consonants", "05-3-medial-vowels",
+  "06-4-final-consonants", "07-5-three-sound-harmony", "08-6-example-usage",
+  "09-postscript-jeong-inji", "10-appendix-guide-notice", "11-appendix-additional",
+  "12-appendix-supplementary", "13-appendix-origin", "14-appendix-hangul-art",
+  "15-appendix-sime-self-hangul", "16-references-editor-closing"
+];
+
+function setLang(lang) {
+  document.body.lang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const text = I18N[lang]?.[key];
+    if (text !== undefined) el.innerHTML = text;
+  });
+  document.querySelectorAll('#langPick button').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+
+  // download links: 'en' uses English edition primary, others use Korean primary
+  const dlPrimary = document.getElementById('downloadPrimary');
+  const dlSecondary = document.getElementById('downloadSecondary');
+  if (lang === 'ko') {
+    dlPrimary.href = 'https://wehome.me/trust/hangul';
+    dlSecondary.href = 'https://wehome.me/trust/hangul-en';
+  } else {
+    dlPrimary.href = 'https://wehome.me/trust/hangul-en';
+    dlSecondary.href = 'https://wehome.me/trust/hangul';
+  }
+
+  // chapter list
+  renderChapters(lang);
+
+  // remember
+  try { localStorage.setItem('hangul_lang', lang); } catch(e) {}
+}
+
+function renderChapters(lang) {
+  const list = CHAPTERS[lang] || CHAPTERS.en;
+  const files = (lang === 'ko') ? CHAPTER_FILES_KO : CHAPTER_FILES_EN;
+  const dir = (lang === 'ko') ? 'chapters' : 'chapters-en';
+  const html = list.map((c, i) => {
+    const file = files[i];
+    const star = c.star ? ' star' : '';
+    return `<a class="chapter${star}" href="${dir}/${file}.pdf">
+      <div class="chapter-num">${c.n}</div>
+      <div class="chapter-title">${c.title}</div>
+      <div class="chapter-pages">${c.pages}</div>
+    </a>`;
+  }).join('');
+  document.getElementById('chapterList').innerHTML = html;
+}
+
+document.querySelectorAll('#langPick button').forEach(b => {
+  b.addEventListener('click', () => setLang(b.dataset.lang));
+});
+
+// Word of the hour (Korean mode only)
+async function loadWordOfHour() {
+  try {
+    const res = await fetch('data/words.json', { cache: 'no-cache' });
+    const data = await res.json();
+    const words = data.words || [];
+    if (!words.length) return;
+
+    const now = new Date();
+    // deterministic by date+hour so all visitors see the same word in the same hour
+    const ymd = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+    const idx = (ymd * 24 + now.getHours()) % words.length;
+    const w = words[idx];
+
+    document.getElementById('wordValue').textContent = w.word;
+    document.getElementById('wordMeaning').textContent = w.meaning;
+    document.getElementById('wordExample').textContent = w.example ? '“' + w.example + '”' : '';
+    const hh = String(now.getHours()).padStart(2, '0');
+    document.getElementById('wordHourMark').textContent = `${now.getMonth()+1}월 ${now.getDate()}일 · ${hh}시`;
+  } catch (e) {
+    console.warn('words.json not loaded', e);
+  }
+}
+
+async function loadNews() {
+  try {
+    const res = await fetch('data/news.json', { cache: 'no-cache' });
+    const data = await res.json();
+    const items = data.items || [];
+    const list = document.getElementById('newsList');
+    if (!items.length) {
+      list.innerHTML = '<div class="news-empty">아직 등록된 소식이 없습니다.</div>';
+      return;
+    }
+    const catClass = (c) => {
+      if (!c) return '';
+      if (c.includes('전시')) return 'exhibit';
+      if (c.includes('이벤트') || c.includes('행사')) return 'event';
+      if (c.includes('정책')) return 'policy';
+      if (c.includes('유튜브')) return 'youtube';
+      return '';
+    };
+    const ytId = (url) => {
+      if (!url) return null;
+      const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([\w-]{11})/);
+      return m ? m[1] : null;
+    };
+    list.innerHTML = items.map(item => {
+      const href = item.url ? `href="${item.url}" target="_blank" rel="noopener"` : '';
+      const isYT = (item.category || '').includes('유튜브');
+      const vid = isYT ? ytId(item.url) : null;
+      const thumb = vid
+        ? `<div class="news-thumb" style="background-image:url('https://img.youtube.com/vi/${vid}/mqdefault.jpg')"></div>`
+        : '';
+      const cardClass = vid ? 'news-card has-thumb' : 'news-card';
+      return `<a class="${cardClass}" ${href}>
+        ${thumb}
+        <div class="news-body">
+          <div class="news-meta">
+            <span class="news-cat ${catClass(item.category)}">${item.category || '소식'}</span>
+            <span>${item.date || ''}</span>
+            ${item.source ? '· <span>' + item.source + '</span>' : ''}
+          </div>
+          <div class="news-title">${item.title || ''}</div>
+          ${item.summary ? '<div class="news-summary">' + item.summary + '</div>' : ''}
+        </div>
+      </a>`;
+    }).join('');
+  } catch (e) {
+    document.getElementById('newsList').innerHTML = '<div class="news-empty">소식을 불러올 수 없습니다.</div>';
+  }
+}
+
+loadWordOfHour();
+loadNews();
+// refresh word every minute so the hour rollover catches up
+setInterval(loadWordOfHour, 60_000);
+
+// auto-detect
+const saved = (() => { try { return localStorage.getItem('hangul_lang'); } catch(e) { return null; } })();
+const browserLang = (navigator.language || 'en').slice(0, 2);
+const supported = ['ko', 'en', 'zh', 'ja', 'es', 'ar'];
+const initial = saved || (supported.includes(browserLang) ? browserLang : 'en');
+setLang(initial);
+</script>
+
+</body>
+</html>

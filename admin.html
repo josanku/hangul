@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한글정음 운영자 페이지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --heaven: #1e40d4;
+    --human: #2ea043;
+    --earth: #d12c2c;
+    --bg: #f5f5f0;
+    --ink: #1a1a1a;
+    --muted: #666;
+    --line: #e5e5e0;
+    --warn: #b45c00;
+  }
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 64px;
+  }
+  header {
+    background: var(--ink);
+    color: white;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  header .inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header h1 { font-size: 18px; font-weight: 800; }
+  header h1 small { font-weight: 400; opacity: 0.7; margin-left: 8px; }
+  header a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    opacity: 0.8;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+  }
+  header a:hover { opacity: 1; }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .panel h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel h2 .badge {
+    background: var(--heaven);
+    color: white;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  input[type="text"], input[type="url"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    background: #fafaf7;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--ink);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: transform 0.1s, opacity 0.15s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--ink); color: white; }
+  .btn-add { background: var(--human); color: white; }
+  .btn-kakao { background: #FEE500; color: #191919; font-weight: 700; }
+  .btn-outline { background: white; color: var(--ink); border: 1px solid var(--line); }
+  .btn-danger { background: white; color: var(--earth); border: 1px solid var(--earth); padding: 6px 12px; font-size: 12px; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+
+  .item-list { display: grid; gap: 10px; margin-top: 12px; }
+  .item {
+    background: #fafaf7;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .item-body { flex: 1; }
+  .item-meta { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .item-title { font-size: 13px; font-weight: 600; }
+  .item-summary { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .preview {
+    background: #fafaf7;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Noto Sans KR', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+
+  .word-display {
+    background: linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .word-display .word-big {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--heaven);
+    margin-bottom: 4px;
+  }
+  .word-display .word-meaning { font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+  .word-display .word-example { font-size: 12px; color: var(--muted); font-style: italic; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-8px);
+  }
+
+  .notice {
+    background: #fff8e1;
+    border: 1px solid #ffd54f;
+    color: var(--warn);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .news-cat {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--ink);
+  }
+  .news-cat.event { background: var(--human); }
+  .news-cat.exhibit { background: var(--heaven); }
+  .news-cat.policy { background: var(--earth); }
+  .news-cat.youtube { background: #ff0000; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <h1>한글정음 운영자 <small>Daily Compose · Kakao Send</small></h1>
+    <a href="index.html">← 메인 페이지</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="notice">
+    💡 입력 내용은 이 브라우저에만 임시 저장됩니다(localStorage). 사이트에 영구 반영하려면 <strong>JSON 다운로드 → data/news.json 덮어쓰기</strong> 하세요.
+  </div>
+
+  <div class="grid">
+
+    <!-- LEFT: INPUT -->
+    <div>
+
+      <div class="panel">
+        <h2>오늘의 우리말 <span class="badge">자동</span></h2>
+        <div id="wordPreview" class="word-display">
+          <div class="word-big">—</div>
+          <div class="word-meaning">—</div>
+          <div class="word-example">—</div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);">매 시간 자동 교체됩니다. 발송 시점의 우리말이 포함됩니다.</p>
+      </div>
+
+      <div class="panel">
+        <h2>새 소식 추가</h2>
+
+        <label>분류</label>
+        <select id="inCategory">
+          <option>뉴스</option>
+          <option>전시</option>
+          <option>이벤트</option>
+          <option>정책</option>
+          <option>유튜브</option>
+          <option>기타</option>
+        </select>
+
+        <label>날짜</label>
+        <input type="date" id="inDate">
+
+        <label>제목 *</label>
+        <input type="text" id="inTitle" placeholder="예: 국립한글박물관 특별기획전 '한글, 우주를 담다'">
+
+        <label>출처/기관</label>
+        <input type="text" id="inSource" placeholder="예: 국립한글박물관">
+
+        <label>링크 (URL)</label>
+        <input type="url" id="inUrl" placeholder="https://...">
+
+        <label>요약 (선택)</label>
+        <textarea id="inSummary" placeholder="한 두 문장의 요약"></textarea>
+
+        <div class="btn-row">
+          <button class="btn btn-add" onclick="addItem()">＋ 소식 추가</button>
+          <button class="btn btn-outline" onclick="clearForm()">지우기</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>오늘 모은 소식 (<span id="itemCount">0</span>)</h2>
+        <div id="itemList" class="item-list"></div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: PREVIEW + SEND -->
+    <div>
+
+      <div class="panel">
+        <h2>카카오 발송 미리보기</h2>
+        <div class="preview" id="kakaoPreview"></div>
+
+        <div class="btn-row">
+          <button class="btn btn-kakao" onclick="sendToChannel()" style="font-size:14px;padding:12px 18px;flex:1;min-width:200px;">
+            💛 채널로 보내기
+          </button>
+          <button class="btn btn-kakao" onclick="sendToOpenChat()" style="font-size:14px;padding:12px 18px;flex:1;min-width:200px;background:#A8E6CF;color:#1a1a1a;">
+            💬 오픈채팅으로 보내기
+          </button>
+        </div>
+
+        <details style="margin-top:12px;font-size:12px;color:var(--muted);">
+          <summary style="cursor:pointer;user-select:none;">고급 옵션 / 도움말</summary>
+          <div style="padding:12px 0;">
+            <p style="margin-bottom:8px;">버튼을 누르면 다음이 자동으로 일어납니다:</p>
+            <ol style="margin-left:20px;line-height:1.8;">
+              <li>메시지가 클립보드에 복사됨</li>
+              <li>카카오 (채널 또는 오픈채팅) 페이지가 새 탭으로 열림</li>
+              <li>글쓰기 / 입력창에서 <strong>Ctrl+V (또는 ⌘+V)</strong>로 붙여넣고 발송</li>
+            </ol>
+            <div class="btn-row" style="margin-top:12px;">
+              <button class="btn btn-outline" onclick="copyKakao()">📋 복사만</button>
+              <button class="btn btn-outline" onclick="openKakaoAdmin()">🔗 채널 관리자</button>
+              <button class="btn btn-outline" onclick="openOpenChat()">🔗 오픈채팅 입장</button>
+            </div>
+            <p style="margin-top:12px;color:var(--warn);">
+              💡 카카오톡 채널 broadcast는 무료지만, 외부에서 자동 발송하려면 카카오 비즈메시지(유료, 사업자 등록 필요)가 필요합니다. business.kakao.com 참조.
+            </p>
+          </div>
+        </details>
+      </div>
+
+      <div class="panel">
+        <h2>사이트에 영구 반영</h2>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">
+          오늘 모은 소식을 사이트 <code>data/news.json</code>에 반영하려면 JSON을 내려받아 파일을 교체하세요.
+        </p>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="downloadJson()">⬇ JSON 내려받기</button>
+          <button class="btn btn-outline" onclick="loadCurrent()">↻ 사이트 데이터 불러오기</button>
+          <button class="btn btn-danger" onclick="resetAll()" style="margin-left:auto;">전체 비우기</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">복사됨</div>
+
+<script>
+const STORAGE_KEY = 'hangul_admin_news';
+const KAKAO_CHANNEL_ID = '_xlLxlbX';
+const KAKAO_CHANNEL_ADMIN = `https://center-pf.kakao.com/${KAKAO_CHANNEL_ID}`;
+const KAKAO_FRIEND_URL = `http://pf.kakao.com/${KAKAO_CHANNEL_ID}/friend`;
+const KAKAO_OPENCHAT = 'https://open.kakao.com/o/pvUHv1pi';
+
+function todayISO() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+function save(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
+let items = load();
+let currentWord = null;
+
+function addItem() {
+  const title = document.getElementById('inTitle').value.trim();
+  if (!title) { toast('제목을 입력하세요'); return; }
+  const it = {
+    date: document.getElementById('inDate').value || todayISO(),
+    category: document.getElementById('inCategory').value,
+    title,
+    source: document.getElementById('inSource').value.trim(),
+    url: document.getElementById('inUrl').value.trim(),
+    summary: document.getElementById('inSummary').value.trim()
+  };
+  items.unshift(it);
+  save(items);
+  render();
+  clearForm();
+  toast('소식이 추가되었습니다');
+}
+
+function clearForm() {
+  document.getElementById('inTitle').value = '';
+  document.getElementById('inSource').value = '';
+  document.getElementById('inUrl').value = '';
+  document.getElementById('inSummary').value = '';
+  document.getElementById('inDate').value = todayISO();
+}
+
+function removeItem(idx) {
+  items.splice(idx, 1);
+  save(items);
+  render();
+}
+
+function render() {
+  document.getElementById('itemCount').textContent = items.length;
+  const list = document.getElementById('itemList');
+  if (!items.length) {
+    list.innerHTML = '<p style="font-size:13px;color:var(--muted);">아직 추가된 소식이 없습니다.</p>';
+  } else {
+    list.innerHTML = items.map((it, i) => {
+      const catCls = it.category && it.category.includes('전시') ? 'exhibit'
+                   : it.category && (it.category.includes('이벤트')||it.category.includes('행사')) ? 'event'
+                   : it.category && it.category.includes('정책') ? 'policy'
+                   : it.category && it.category.includes('유튜브') ? 'youtube' : '';
+      return `<div class="item">
+        <div class="item-body">
+          <div class="item-meta">
+            <span class="news-cat ${catCls}">${it.category || '소식'}</span>
+            ${it.date} ${it.source ? '· ' + it.source : ''}
+          </div>
+          <div class="item-title">${escapeHtml(it.title)}</div>
+          ${it.summary ? '<div class="item-summary">' + escapeHtml(it.summary) + '</div>' : ''}
+        </div>
+        <button class="btn btn-danger" onclick="removeItem(${i})">삭제</button>
+      </div>`;
+    }).join('');
+  }
+  renderPreview();
+}
+
+function escapeHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderPreview() {
+  const d = new Date();
+  const ymd = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+  let txt = `📨 한글정음 ${ymd}\n`;
+  txt += `━━━━━━━━━━━━━━\n\n`;
+
+  if (currentWord) {
+    txt += `🌱 이 시간의 우리말 — ${currentWord.word}\n`;
+    txt += `   ${currentWord.meaning}\n`;
+    if (currentWord.example) txt += `   "${currentWord.example}"\n`;
+    txt += `\n`;
+  }
+
+  if (items.length) {
+    // Separate YouTube from regular news for cleaner format
+    const youtube = items.filter(it => (it.category || '').includes('유튜브'));
+    const news = items.filter(it => !(it.category || '').includes('유튜브'));
+
+    if (news.length) {
+      txt += `📰 오늘의 한글 소식 (${news.length})\n\n`;
+      news.forEach((it, i) => {
+        txt += `${i+1}. [${it.category || '소식'}] ${it.title}\n`;
+        if (it.source) txt += `   ▸ ${it.source}\n`;
+        if (it.summary) txt += `   ${it.summary}\n`;
+        if (it.url) txt += `   ${it.url}\n`;
+        txt += `\n`;
+      });
+    }
+
+    if (youtube.length) {
+      txt += `▶ 오늘의 유튜브 추천 (${youtube.length})\n\n`;
+      youtube.forEach((it, i) => {
+        txt += `${i+1}. ${it.title}\n`;
+        if (it.source) txt += `   ▸ ${it.source}\n`;
+        if (it.summary) txt += `   ${it.summary}\n`;
+        if (it.url) txt += `   ${it.url}\n`;
+        txt += `\n`;
+      });
+    }
+  } else {
+    txt += `오늘 모은 소식이 아직 없습니다.\n\n`;
+  }
+
+  txt += `━━━━━━━━━━━━━━\n`;
+  txt += `📖 한글정음 무료 받기 → wehome.me/trust/hangul\n`;
+  txt += `🌐 사이트 → hangul.kr (예시)\n`;
+
+  document.getElementById('kakaoPreview').textContent = txt;
+}
+
+async function copyKakao() {
+  const txt = document.getElementById('kakaoPreview').textContent;
+  await copyToClipboard(txt);
+  toast('카카오 메시지가 복사되었습니다');
+}
+
+function openKakaoAdmin() {
+  window.open(KAKAO_CHANNEL_ADMIN, '_blank');
+}
+
+function openOpenChat() {
+  window.open(KAKAO_OPENCHAT, '_blank');
+}
+
+async function copyToClipboard(txt) {
+  try {
+    await navigator.clipboard.writeText(txt);
+  } catch(e) {
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+}
+
+async function sendToChannel() {
+  const txt = document.getElementById('kakaoPreview').textContent;
+  if (!txt.trim()) { toast('미리보기가 비었습니다'); return; }
+  await copyToClipboard(txt);
+  window.open(KAKAO_CHANNEL_ADMIN, '_blank');
+  toast('복사됨! 채널에서 글쓰기 → 붙여넣기(⌘V) → 발송');
+}
+
+async function sendToOpenChat() {
+  const txt = document.getElementById('kakaoPreview').textContent;
+  if (!txt.trim()) { toast('미리보기가 비었습니다'); return; }
+  await copyToClipboard(txt);
+  window.open(KAKAO_OPENCHAT, '_blank');
+  toast('복사됨! 오픈채팅 입력창에 붙여넣기(⌘V) → 전송');
+}
+
+function downloadJson() {
+  const data = {
+    description: '한글 관련 뉴스·전시·이벤트·정책 모음 — 운영자가 매일 업데이트',
+    lastUpdated: todayISO(),
+    items: items
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'news.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('news.json 다운로드 완료 — data/news.json 에 덮어쓰세요');
+}
+
+async function loadCurrent() {
+  try {
+    const res = await fetch('data/news.json?_=' + Date.now());
+    const data = await res.json();
+    if (confirm('현재 사이트 데이터를 불러와서 덮어쓸까요? (현재 작업 내용은 사라집니다)')) {
+      items = data.items || [];
+      save(items);
+      render();
+      toast('사이트 데이터를 불러왔습니다');
+    }
+  } catch(e) {
+    toast('불러오기 실패: ' + e.message);
+  }
+}
+
+function resetAll() {
+  if (confirm('모든 임시 소식을 비울까요?')) {
+    items = [];
+    save(items);
+    render();
+    toast('비웠습니다');
+  }
+}
+
+async function loadWord() {
+  try {
+    const res = await fetch('data/words.json');
+    const data = await res.json();
+    const words = data.words || [];
+    if (!words.length) return;
+    const now = new Date();
+    const ymd = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+    const idx = (ymd * 24 + now.getHours()) % words.length;
+    currentWord = words[idx];
+    const wp = document.getElementById('wordPreview');
+    wp.querySelector('.word-big').textContent = currentWord.word;
+    wp.querySelector('.word-meaning').textContent = currentWord.meaning;
+    wp.querySelector('.word-example').textContent = currentWord.example ? '"' + currentWord.example + '"' : '';
+    renderPreview();
+  } catch(e) {
+    console.warn('word load failed', e);
+  }
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+document.getElementById('inDate').value = todayISO();
+loadWord();
+setInterval(loadWord, 60_000);
+render();
+</script>
+
+</body>
+</html>

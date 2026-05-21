@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>순우리말 — 한글정음</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --heaven: #1e40d4;
+    --human: #2ea043;
+    --earth: #d12c2c;
+    --bg: #fafaf7;
+    --ink: #1a1a1a;
+    --muted: #666;
+    --line: #e5e5e0;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 64px;
+  }
+  .topbar {
+    background: rgba(250, 250, 247, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .topbar .inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .topbar .brand { font-size: 14px; font-weight: 700; }
+  .topbar a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .topbar a:hover { color: var(--ink); border-color: var(--line); }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 64px 24px 32px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .hero .subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  /* CURRENT WORD */
+  .now {
+    background: linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
+    border: 1px solid var(--heaven);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+    margin: 0 auto 40px;
+    max-width: 520px;
+  }
+  .now .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--heaven);
+    background: rgba(30, 64, 212, 0.1);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .now .word {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .now .meaning {
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .now .example {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .now .hour {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  /* SEARCH */
+  .search {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+  .search input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    background: white;
+  }
+  .search input:focus { outline: none; border-color: var(--ink); }
+  .search-meta {
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* WORDS GRID */
+  .words-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .word-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .word-card:hover { border-color: var(--ink); transform: translateY(-1px); }
+  .word-card.current { border-color: var(--heaven); border-width: 2px; background: linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%); }
+  .word-card .w {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .word-card.current .w { color: var(--heaven); }
+  .word-card .m {
+    font-size: 13px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .word-card .e {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    border-top: 1px dashed var(--line);
+    padding-top: 8px;
+  }
+  .word-card .now-badge {
+    display: inline-block;
+    background: var(--heaven);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 48px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 48px 24px 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px 24px; }
+    .words-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="inner">
+    <div class="brand">○△□ 한글정음</div>
+    <div>
+      <a href="index.html">← 메인으로</a>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>순우리말</h1>
+  <p class="subtitle">한글정음이 매 시간 보여주는 우리말의 전체 목록입니다.</p>
+</div>
+
+<div class="container">
+
+  <div class="now" id="nowBox">
+    <div class="tag">이 시간의 우리말</div>
+    <div class="word" id="nowWord">—</div>
+    <div class="meaning" id="nowMeaning">—</div>
+    <div class="example" id="nowExample">—</div>
+    <div class="hour" id="nowHour">—</div>
+  </div>
+
+  <div class="search">
+    <input type="text" id="searchInput" placeholder="우리말, 뜻, 용례로 찾아보기 (예: 가람, 하늘, 봄)">
+    <div class="search-meta" id="searchMeta">—</div>
+  </div>
+
+  <div class="words-grid" id="wordsGrid"></div>
+
+  <footer>
+    <p style="margin-bottom:8px;">한글정음 · 순우리말 모음</p>
+    <p>
+      <a href="index.html">메인</a> ·
+      <a href="https://wehome.me/trust/hangul">책 받기</a> ·
+      <a href="http://pf.kakao.com/_xlLxlbX/friend">카톡 채널</a> ·
+      <a href="https://open.kakao.com/o/pvUHv1pi">오픈채팅</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+let WORDS = [];
+let currentIdx = -1;
+
+async function load() {
+  try {
+    const res = await fetch('data/words.json', { cache: 'no-cache' });
+    const data = await res.json();
+    WORDS = data.words || [];
+    computeCurrent();
+    render();
+  } catch (e) {
+    document.getElementById('wordsGrid').innerHTML = '<div class="empty">사전을 불러올 수 없습니다.</div>';
+  }
+}
+
+function computeCurrent() {
+  if (!WORDS.length) return;
+  const now = new Date();
+  const ymd = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+  currentIdx = (ymd * 24 + now.getHours()) % WORDS.length;
+  const w = WORDS[currentIdx];
+  document.getElementById('nowWord').textContent = w.word;
+  document.getElementById('nowMeaning').textContent = w.meaning;
+  document.getElementById('nowExample').textContent = w.example ? '“' + w.example + '”' : '';
+  const hh = String(now.getHours()).padStart(2, '0');
+  document.getElementById('nowHour').textContent = `${now.getMonth()+1}월 ${now.getDate()}일 · ${hh}시`;
+}
+
+function render() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const grid = document.getElementById('wordsGrid');
+  const meta = document.getElementById('searchMeta');
+
+  const filtered = WORDS
+    .map((w, i) => ({ w, i }))
+    .filter(({ w }) => {
+      if (!q) return true;
+      return (w.word || '').toLowerCase().includes(q)
+        || (w.meaning || '').toLowerCase().includes(q)
+        || (w.example || '').toLowerCase().includes(q);
+    });
+
+  meta.textContent = q
+    ? `${filtered.length}개 / 전체 ${WORDS.length}`
+    : `전체 ${WORDS.length}`;
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty">찾으시는 우리말이 없습니다.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(({ w, i }) => {
+    const isCur = i === currentIdx;
+    return `<div class="word-card ${isCur ? 'current' : ''}">
+      <div class="w">${escapeHtml(w.word)}${isCur ? '<span class="now-badge">지금</span>' : ''}</div>
+      <div class="m">${escapeHtml(w.meaning || '')}</div>
+      ${w.example ? '<div class="e">“' + escapeHtml(w.example) + '”</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.getElementById('searchInput').addEventListener('input', render);
+load();
+// 시간 전환 대비 1분 주기
+setInterval(() => { computeCurrent(); render(); }, 60_000);
+</script>
+
+</body>
+</html>

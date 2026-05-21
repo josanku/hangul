@@ -1,0 +1,14 @@
+{
+  "description": "한글 관련 뉴스·전시·이벤트·정책 모음 — 운영자가 매일 업데이트",
+  "lastUpdated": "2026-05-21",
+  "items": [
+    {
+      "date": "2026-05-21",
+      "category": "전시",
+      "title": "예시: 국립한글박물관 특별기획전 '한글, 우주를 담다'",
+      "source": "국립한글박물관",
+      "url": "https://www.hangeul.go.kr",
+      "summary": "운영자가 admin.html 에서 오늘의 내용을 입력하세요. 이 항목은 예시입니다."
+    }
+  ]
+}
